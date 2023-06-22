@@ -15,9 +15,11 @@ public class POIFeaturesService {
     this.geocodingService = geocodingService;
   }
 
-  public void createPOIFeature(POIFeatureDto poiFeature) {
-    // TODO: Call out to ESRIGeocodingService to reverse geocode the provided geocoordinates
+  public POIFeatureDto createPOIFeature(POIFeatureDto poiFeature) {
+    String geocodedResponse = geocodingService.geocodeAddress(poiFeature.getAddress());
+    poiFeature.setRawGeocodedAddress(geocodedResponse);
     // TODO: Save poiFeature to DB
+    return poiFeature;
   }
 
 }
