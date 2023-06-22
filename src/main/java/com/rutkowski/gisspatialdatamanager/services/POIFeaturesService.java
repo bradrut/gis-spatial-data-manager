@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rutkowski.gisspatialdatamanager.types.dtos.POIFeatureDto;
+import com.rutkowski.gisspatialdatamanager.types.geometries.PointGeometry;
 
 @Service
 public class POIFeaturesService {
@@ -16,8 +17,8 @@ public class POIFeaturesService {
   }
 
   public POIFeatureDto createPOIFeature(POIFeatureDto poiFeature) {
-    String geocodedResponse = geocodingService.geocodeAddress(poiFeature.getAddress());
-    poiFeature.setRawGeocodedAddress(geocodedResponse);
+    PointGeometry pointGeometryFromAddress = geocodingService.geocodeAddress(poiFeature.getAddress());
+    poiFeature.setGeometry(pointGeometryFromAddress);
     // TODO: Save poiFeature to DB
     return poiFeature;
   }

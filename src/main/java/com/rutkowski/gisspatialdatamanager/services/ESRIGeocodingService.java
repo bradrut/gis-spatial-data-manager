@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.rutkowski.gisspatialdatamanager.types.esri.GeocodeResponse;
+import com.rutkowski.gisspatialdatamanager.types.geometries.PointGeometry;
+
 @Service
 public class ESRIGeocodingService {
 
@@ -21,17 +24,17 @@ public class ESRIGeocodingService {
     this.restTemplate = new RestTemplate();
   }
 
-  public String geocodeAddress(String address) {
+  public PointGeometry geocodeAddress(String address) {
     String uri = UriComponentsBuilder.fromHttpUrl(this.esriGeocodingURI)
-      .queryParam("f", "pjson")
+      .queryParam("f", "json")
       .queryParam("singleLine", address)
       .queryParam("token", this.environment.getProperty("esri.api.key"))
       .encode()
       .toUriString();
 
-    ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+    ResponseEntity<GeocodeResponse> response = restTemplate.getForEntity(uri, GeocodeResponse.class);
 
-    return response.getBody();
+    return response.getBody().getCandidates()[0].getLocation();
   }
   
 }
